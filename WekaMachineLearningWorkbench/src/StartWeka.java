@@ -21,6 +21,8 @@ import java.util.Random;
 
 
 
+
+
 import weka.filters.Filter;
 import weka.attributeSelection.AttributeSelection;
 import weka.attributeSelection.CfsSubsetEval;
@@ -130,8 +132,9 @@ public class StartWeka {
 			class4 = classNames.value(3)+sepCSV+eval.truePositiveRate(3)+sepCSV+eval.falsePositiveRate(3)+sepCSV+eval.precision(3)+sepCSV+eval.recall(3)+sepCSV+eval.fMeasure(3)+sepCSV+eval.areaUnderROC(3);
 			classifierName="BayesNet Default values all 160 attributes"+testMethod;
 			evalString += classifierName+ls+class1+ls+class2+ls+class3+ls+class4+ls+ls;
-			
 		
+//		evalString = bayesNetFct(eval, train, classNames, "TrainingIsTestData", false, 0, 0, true);
+
 //*******************************NAIVE BAYES Default values all 160 attributes*******************************//
 		
 		NaiveBayes nB = new NaiveBayes();
@@ -349,21 +352,31 @@ public class StartWeka {
 		
 	}
 	
-	public String bayesNetFct(Evaluation ev, Instances tr, Attribute classNames, String testMethod, boolean crossvalidation, int folds, boolean trainingIsTest){
+	public static String bayesNetFct(Evaluation ev, Instances tr, Attribute classNames, String testMethod, boolean crossvalidation, int folds, int randomSeed, boolean trainingIsTest){
 		BayesNet bN = new BayesNet();
 		try {
 			bN.buildClassifier(tr);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
 		try {
 			ev = new Evaluation(tr);
-//			eval.crossValidateModel(bN,train,10,new Random(1));
-			ev.evaluateModel(bN,tr);
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
+
+		if(trainingIsTest){
+				try {
+					ev.evaluateModel(bN,tr);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+		}else{
+			try {
+				ev.crossValidateModel(bN,tr,folds,new Random(1));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 		
 		String class1 = classNames.value(0)+sepCSV+ev.truePositiveRate(0)+sepCSV+ev.falsePositiveRate(0)+sepCSV+ev.precision(0)+sepCSV+ev.recall(0)+sepCSV+ev.fMeasure(0)+sepCSV+ev.areaUnderROC(0);
