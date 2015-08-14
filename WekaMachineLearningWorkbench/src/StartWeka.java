@@ -105,35 +105,40 @@ public class StartWeka {
 
 		
 //*******************************BAYES NET Default values all 160 attributes*******************************//
-			BayesNet bN = new BayesNet();
-			try {
-				bN.buildClassifier(train);
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
+//			BayesNet bN = new BayesNet();
+//			try {
+//				bN.buildClassifier(train);
+//			} catch (Exception e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//			
 			try {
 				eval = new Evaluation(train);
-//				eval.crossValidateModel(bN,train,10,new Random(1));
-				eval.evaluateModel(bN,train);
+////				eval.crossValidateModel(bN,train,10,new Random(1));
+//				eval.evaluateModel(bN,train);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
+
 			Attribute classNames = train.classAttribute();
-//			header = "class name"+sepCSV+"truePositiveRate"+sepCSV+"falsePositiveRate"+sepCSV+"Precision"+sepCSV+"Recall"+sepCSV+"fMeasure"+sepCSV+"ROC"+ls;
 			
-//			classNames = train.classAttribute();
-			class1 = classNames.value(0)+sepCSV+eval.truePositiveRate(0)+sepCSV+eval.falsePositiveRate(0)+sepCSV+eval.precision(0)+sepCSV+eval.recall(0)+sepCSV+eval.fMeasure(0)+sepCSV+eval.areaUnderROC(0);
-			class2 = classNames.value(1)+sepCSV+eval.truePositiveRate(1)+sepCSV+eval.falsePositiveRate(1)+sepCSV+eval.precision(1)+sepCSV+eval.recall(1)+sepCSV+eval.fMeasure(1)+sepCSV+eval.areaUnderROC(1);
-			class3 = classNames.value(2)+sepCSV+eval.truePositiveRate(2)+sepCSV+eval.falsePositiveRate(2)+sepCSV+eval.precision(2)+sepCSV+eval.recall(2)+sepCSV+eval.fMeasure(2)+sepCSV+eval.areaUnderROC(2);
-			class4 = classNames.value(3)+sepCSV+eval.truePositiveRate(3)+sepCSV+eval.falsePositiveRate(3)+sepCSV+eval.precision(3)+sepCSV+eval.recall(3)+sepCSV+eval.fMeasure(3)+sepCSV+eval.areaUnderROC(3);
-			classifierName="BayesNet Default values all 160 attributes"+testMethod;
-			evalString += classifierName+ls+class1+ls+class2+ls+class3+ls+class4+ls+ls;
-		
-//		evalString = bayesNetFct(eval, train, classNames, "TrainingIsTestData", false, 0, 0, true);
+////			header = "class name"+sepCSV+"truePositiveRate"+sepCSV+"falsePositiveRate"+sepCSV+"Precision"+sepCSV+"Recall"+sepCSV+"fMeasure"+sepCSV+"ROC"+ls;
+//			
+////			classNames = train.classAttribute();
+//			class1 = classNames.value(0)+sepCSV+eval.truePositiveRate(0)+sepCSV+eval.falsePositiveRate(0)+sepCSV+eval.precision(0)+sepCSV+eval.recall(0)+sepCSV+eval.fMeasure(0)+sepCSV+eval.areaUnderROC(0);
+//			class2 = classNames.value(1)+sepCSV+eval.truePositiveRate(1)+sepCSV+eval.falsePositiveRate(1)+sepCSV+eval.precision(1)+sepCSV+eval.recall(1)+sepCSV+eval.fMeasure(1)+sepCSV+eval.areaUnderROC(1);
+//			class3 = classNames.value(2)+sepCSV+eval.truePositiveRate(2)+sepCSV+eval.falsePositiveRate(2)+sepCSV+eval.precision(2)+sepCSV+eval.recall(2)+sepCSV+eval.fMeasure(2)+sepCSV+eval.areaUnderROC(2);
+//			class4 = classNames.value(3)+sepCSV+eval.truePositiveRate(3)+sepCSV+eval.falsePositiveRate(3)+sepCSV+eval.precision(3)+sepCSV+eval.recall(3)+sepCSV+eval.fMeasure(3)+sepCSV+eval.areaUnderROC(3);
+//			classifierName="BayesNet Default values all 160 attributes"+testMethod;
+//			evalString += classifierName+ls+class1+ls+class2+ls+class3+ls+class4+ls+ls;
+//		
+		int numFolds = 0;
+		int randomSeed = 0;
+		boolean isFold = true;
+		boolean isTrainingTest = true;
+		evalString += bayesNetFct(eval, train, classNames, "TrainingIsTestData", !isFold, numFolds, randomSeed, isTrainingTest);
 
 //*******************************NAIVE BAYES Default values all 160 attributes*******************************//
 		
@@ -371,7 +376,9 @@ public class StartWeka {
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
-		}else{
+		}
+		
+		if(crossvalidation){
 			try {
 				ev.crossValidateModel(bN,tr,folds,new Random(1));
 			} catch (Exception e) {
@@ -387,5 +394,10 @@ public class StartWeka {
 		String evString = classifierName+ls+class1+ls+class2+ls+class3+ls+class4+ls+ls;
 		return evString;
 	}
+	
+	public static String naiveBayesFct(Evaluation ev, Instances tr, Attribute classNames, String testMethod, boolean crossvalidation, int folds, int randomSeed, boolean trainingIsTest){
+		return "";
+	}
+
 
 }
