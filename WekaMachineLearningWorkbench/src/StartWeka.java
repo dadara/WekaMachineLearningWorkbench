@@ -1,3 +1,12 @@
+/* @author: Daniela Ramsauer daniela.ramsauer.univie.ac.at
+ * Mood Classification for Social Media messages (Twitter Tweets, Facebook Posts,...) 
+ * programm to test different text classification algorithms on test data sets
+ * arg[0]: name of arff test file
+ * arg[1]: path to arff test file
+ * classification algorithm tested: BayesNet, NaiveBayes, J48, SMO
+ * method used 10-fold cross validation 
+ * saves csv files with test data: arff file used for testing, classifier names and results (TP,FP, Recall, Precision, F1, ROC)
+ */
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -5,23 +14,8 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Random;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 import weka.filters.Filter;
 import weka.attributeSelection.AttributeSelection;
@@ -33,6 +27,7 @@ import weka.attributeSelection.Ranker;
 import weka.classifiers.Evaluation;
 import weka.classifiers.bayes.BayesNet;
 import weka.classifiers.bayes.NaiveBayes;
+import weka.classifiers.functions.Logistic;
 import weka.classifiers.functions.SMO;
 import weka.classifiers.meta.AttributeSelectedClassifier;
 import weka.classifiers.trees.J48;
@@ -42,20 +37,74 @@ import weka.core.Utils;
 
 public class StartWeka {
 	
-	static String ls;
-	static String spaces;
-	static String sepCSV;
+	public static String ls;
+	public static String spaces;
+	public static String sepCSV;
+	static String fs;
+	static String envPath;
+	static String arffFile;
+	static String filePlace;
+	static String arffFilePlace;
+	static String evalString;
+	static ArrayList<String> arffFileNames;
+	static ArrayList<String> arffFilePaths;
+	static Instances train;
 
 	public static void main(String[] args) {
 		
+		ls = System.getProperty("line.separator");
+		spaces = "          ";
+		sepCSV =",";
+		fs = File.separator;
+		
+		arffFileNames = new ArrayList<String>(); 
+		arffFileNames.add("groundtruth-happy.csv.arff");
+		arffFileNames.add("groundtruth-sad.csv.arff");
+		arffFileNames.add("groundtruth-stress.csv.arff");	
+		
+		envPath = System.getProperty("user.dir");
+		filePlace = envPath+fs+"groundtruthData"+fs;
+		ArrayList<String> arffFilePaths = new ArrayList<String>();
+		for(int i = 0; i<arffFileNames.size(); i++){
+			System.out.println(arffFileNames.get(i));
+			arffFilePaths.add(filePlace+arffFileNames.get(i));
+			System.out.println(arffFilePaths.get(i));
+		}
+		
+/*		if(args.length>=1){
+			arffFile = args[0];
+			filePlace = args[1];
+			System.out.println("arffFile: "+arffFile);
+			System.out.println("filePlace: "+filePlace);
+			File file = new File(filePlace);
+			if (!file.isDirectory()){
+				filePlace = envPath+fs+"groundtruthData"+fs+arffFile;
+			}else filePlace += arffFile;
+		}*/
+		
+		ClassifierMethods cm = new ClassifierMethods();
+		
+/********************************* groundtruth-happy.csv.arff ***********************************/		
+		train = readInArffFile(arffFilePaths.get(0));
+		evalString += executeClassifiers(cm, train, arffFileNames.get(0));		
+/********************************* groundtruth-sad.csv.arff ***********************************/
+		train = readInArffFile(arffFilePaths.get(1));
+		evalString += executeClassifiers(cm, train, arffFileNames.get(1));		
+/********************************* groundtruth-stress.csv.arff ************************************/
+		train = readInArffFile(arffFilePaths.get(2));
+		evalString += executeClassifiers(cm, train, arffFileNames.get(2));		
+		
+/********************************* save binary classes results  ************************************/
+		saveFile(evalString,"allBinaryResults");
+		
+	}
+	
+	public static Instances readInArffFile(String arffFilePlace){
+		
 		BufferedReader breader=null;
-		String fs = File.separator;
-		String envPath = System.getProperty("user.dir");
-		String arffFile = "groundtruth.arff";
-		String filePlace = envPath+fs+"groundtruthData"+fs+arffFile;
-
+		breader = null;
 		try {
-			breader = new BufferedReader(new FileReader(filePlace));		
+			breader = new BufferedReader(new FileReader(arffFilePlace));		
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -77,63 +126,32 @@ public class StartWeka {
 			e.printStackTrace();
 		}
 		
-//		String ls = System.getProperty("line.separator");
-//		String spaces = "          ";
-//		String sepCSV =",";
-		ls = System.getProperty("line.separator");
-		spaces = "          ";
-		sepCSV =",";
-		String filepath;
-		if(args.length<1){
-			filepath ="C:"+fs+"Users"+fs+"ramsauerd89cs"+fs+"workspaceGitPrecious"+fs;
-		}else{
-			filepath = args[0];
-		}
+		return train;
+	}
+	
+	public static String executeClassifiers(ClassifierMethods cm, Instances train,  String arffFile){
 		
-		String header = "arff file is in: groundtruthData"+fs+arffFile+ls+ls+"class name"+sepCSV+"truePositiveRate"+sepCSV+"falsePositiveRate"+sepCSV+"Precision"+sepCSV+"Recall"+sepCSV+"fMeasure"+sepCSV+"ROC"+ls+ls;
-		String classifierName="";
-		String class1 = "";
-		String class2 = "";
-		String class3 = "";
-		String class4 = "";
-		String evalString = header;
-		String testMethod=ls+"training data is used as test data "+ls;
-		
-		Evaluation eval=null;
-		
-		try {
-			eval = new Evaluation(train);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
 		Attribute classNames = train.classAttribute();
-				
-		int numFolds = 0;
-		int randomSeed = 0;
-		boolean isFold = true;
-		boolean isTrainingTest = true;
-
-		
-//*******************************BAYES NET Default values all 160 attributes*******************************//
-		
-		evalString += bayesNetFct(eval, train, classNames, "TrainingIsTestData", !isFold, numFolds, randomSeed, isTrainingTest);
-
-//*******************************NAIVE BAYES Default values all 160 attributes*******************************//
-		
-		evalString += naiveBayesFct(eval, train, classNames, "TrainingIsTestData", !isFold, numFolds, randomSeed, isTrainingTest);
-		
-//*******************************J48 Default values all 160 attributes*******************************//
-		evalString += j48Fct(eval, train, classNames, "TrainingIsTestData", !isFold, numFolds, randomSeed, isTrainingTest);
-			
-//*******************************SMO Default values all 160 attributes*******************************//
-		evalString += smoFct(eval, train, classNames, "TrainingIsTestData", !isFold, numFolds, randomSeed, isTrainingTest);
-
-
+		evalString = "";
+		String header = "arff file is in: groundtruthData"+fs+arffFile+ls+ls+"class name"+sepCSV+"truePositiveRate"+sepCSV+"falsePositiveRate"+sepCSV+"Precision"+sepCSV+"Recall"+sepCSV+"fMeasure"+sepCSV+"ROC"+ls+ls;
+		evalString += header;
+		evalString += cm.bayesNetFct10folds1random(train, classNames);
+		evalString += cm.naiveBayesFct10folds1random(train, classNames);
+		evalString += cm.j48Fct10folds1random(train, classNames);			
+		evalString += cm.smoFct10folds1random(train, classNames);
+		evalString += cm.logisticRegr10folds1random(train, classNames);
 		
 		System.out.println(evalString);
+		return evalString; 
+	}
+	
+	public static void saveFile(String resultString, String arffFileName){
+		File createFolder = new File(envPath+fs+"results"+fs);
+		if(!createFolder.isDirectory()){
+			createFolder.mkdirs();
+		}
 		
-		File saveWekaResults = new File(envPath+fs+"results"+fs+"wekaEvalResults.csv");
+		File saveWekaResults = new File(envPath+fs+"results"+fs+arffFileName+".csv");
 		
 		if (!saveWekaResults.exists()) {
 			try {
@@ -149,16 +167,18 @@ public class StartWeka {
 		try {
 			fw = new FileWriter(saveWekaResults.getAbsoluteFile());
 			bw = new BufferedWriter(fw);
-			bw.write(evalString);
+			bw.write(resultString);
 			bw.close();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
-		
-		
 	}
+	
+	
+	
+	
+//***********************************classification use training set as test set or to use ten-folds cross validation*********/
 	
 	public static String bayesNetFct(Evaluation ev, Instances tr, Attribute classNames, String testMethod, boolean crossvalidation, int folds, int randomSeed, boolean trainingIsTest){
 		BayesNet bN = new BayesNet();
@@ -183,7 +203,7 @@ public class StartWeka {
 		
 		if(crossvalidation){
 			try {
-				ev.crossValidateModel(bN,tr,folds,new Random(1));
+				ev.crossValidateModel(bN,tr,folds,new Random(randomSeed));
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -197,6 +217,10 @@ public class StartWeka {
 		String evString = classifierName+ls+class1+ls+class2+ls+class3+ls+class4+ls+ls;
 		return evString;
 	}
+	
+	
+	
+	
 	
 	public static String naiveBayesFct(Evaluation ev, Instances tr, Attribute classNames, String testMethod, boolean crossvalidation, int folds, int randomSeed, boolean trainingIsTest){
 		NaiveBayes nB = new NaiveBayes();
