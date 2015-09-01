@@ -62,8 +62,8 @@ public class ClassifierRunnable implements Runnable{
 	   System.out.println("in THREAD");
        String evalString = executeClassifiers(cm, instances, arffFileNames.get(actClass));	
 	   System.out.println("beforeSave");
-
-       saveFile(evalString,arffFileNames.get(actClass)+"Results", "BayesFunction-excMultiP-J48-");
+	   String arffName = arffFileNames.get(actClass);
+       saveFile(evalString, arffName.substring(0,  arffName.indexOf("."))+"Results", "BayesFunction-excMultiP-J48-");
      
     
      System.out.println("mythread run is over" );
