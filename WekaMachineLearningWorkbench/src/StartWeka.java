@@ -71,36 +71,30 @@ public class StartWeka {
 		filePlace = envPath+fs+"groundtruthData"+fs;
 		ArrayList<String> arffFilePaths = new ArrayList<String>();
 		for(int i = 0; i<arffFileNames.size(); i++){
-			System.out.println(arffFileNames.get(i));
+//			System.out.println(arffFileNames.get(i));
 			arffFilePaths.add(filePlace+arffFileNames.get(i));
-			System.out.println(arffFilePaths.get(i));
+//			System.out.println(arffFilePaths.get(i));
 		}
 		
-/*		if(args.length>=1){
-			arffFile = args[0];
-			filePlace = args[1];
-			System.out.println("arffFile: "+arffFile);
-			System.out.println("filePlace: "+filePlace);
-			File file = new File(filePlace);
-			if (!file.isDirectory()){
-				filePlace = envPath+fs+"groundtruthData"+fs+arffFile;
-			}else filePlace += arffFile;
-		}*/
 		
 		ClassifierMethods cm = new ClassifierMethods();
 		
 /********************************* groundtruth-happy.csv.arff ***********************************/		
 		train = readInArffFile(arffFilePaths.get(0));
-		evalString = executeClassifiers(cm, train, arffFileNames.get(0));		
-		saveFile(evalString,"HappyBinaryResults", "BayesFunction-excMultiP-J48-");
+//		evalString = executeClassifiers(cm, train, arffFileNames.get(0));		
+//		saveFile(evalString,"HappyBinaryResults", "BayesFunction-excMultiP-J48-");
+		ClassifierRunnable crHappy = new ClassifierRunnable(arffFileNames,arffFilePaths,train,0);
 /********************************* groundtruth-sad.csv.arff ***********************************/
 		train = readInArffFile(arffFilePaths.get(1));
-		evalString = executeClassifiers(cm, train, arffFileNames.get(1));	
-		saveFile(evalString,"SadBinaryResults", "BayesFunction-excMultiP-J48-");
+//		evalString = executeClassifiers(cm, train, arffFileNames.get(1));	
+//		saveFile(evalString,"SadBinaryResults", "4BayesFunction-excMultiP-J48-");
+		ClassifierRunnable crSad = new ClassifierRunnable(arffFileNames,arffFilePaths,train,1);
 /********************************* groundtruth-stress.csv.arff ************************************/
 		train = readInArffFile(arffFilePaths.get(2));
-		evalString = executeClassifiers(cm, train, arffFileNames.get(2));	
-		saveFile(evalString,"StressBinaryResults", "BayesFunction-excMultiP-J48-");	
+//		evalString = executeClassifiers(cm, train, arffFileNames.get(2));	
+//		saveFile(evalString,"StressBinaryResults", "4BayesFunction-excMultiP-J48-");	
+		ClassifierRunnable crStress = new ClassifierRunnable(arffFileNames,arffFilePaths,train,2);
+
 	}
 	
 	public static Instances readInArffFile(String arffFilePlace){

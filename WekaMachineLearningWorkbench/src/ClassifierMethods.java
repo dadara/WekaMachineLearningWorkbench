@@ -52,12 +52,18 @@ public class ClassifierMethods {
 			e.printStackTrace();
 		}
 		
-		truePositiveRate = (ev.truePositiveRate(0)+ev.truePositiveRate(1))/2;
-		falsePositiveRate = (ev.falsePositiveRate(0)+ev.falsePositiveRate(1))/2;
-		precision = (ev.precision(0)+ev.precision(1))/2;
-		recall = (ev.recall(0)+ev.recall(1))/2;
-		fMeasure = (ev.fMeasure(0)+ev.fMeasure(1))/2;
-		roc = (ev.areaUnderROC(0)+ev.areaUnderROC(1))/2;
+//		truePositiveRate = (ev.truePositiveRate(0)+ev.truePositiveRate(1))/2;
+//		falsePositiveRate = (ev.falsePositiveRate(0)+ev.falsePositiveRate(1))/2;
+//		precision = (ev.precision(0)+ev.precision(1))/2;
+//		recall = (ev.recall(0)+ev.recall(1))/2;
+//		fMeasure = (ev.fMeasure(0)+ev.fMeasure(1))/2;
+//		roc = (ev.areaUnderROC(0)+ev.areaUnderROC(1))/2;
+		truePositiveRate = ev.weightedTruePositiveRate();
+		falsePositiveRate = ev.weightedFalseNegativeRate();
+		precision = ev.weightedPrecision();
+		recall = ev.weightedRecall();
+		fMeasure = ev.weightedFMeasure();
+		roc = ev.weightedAreaUnderROC();
 		
 		String classAvg = truePositiveRate+StartWeka.sepCSV+falsePositiveRate+StartWeka.sepCSV+precision+StartWeka.sepCSV+recall+StartWeka.sepCSV+fMeasure+StartWeka.sepCSV+roc;
 		classifierName+=" 10folds-Random(1)";
