@@ -1,11 +1,10 @@
 /* @author: Daniela Ramsauer daniela.ramsauer.univie.ac.at
  * Mood Classification for Social Media messages (Twitter Tweets, Facebook Posts,...) 
  * programm to test different text classification algorithms on test data sets
- * arg[0]: name of arff test file
- * arg[1]: path to arff test file
- * classification algorithm tested: BayesNet, NaiveBayes, J48, SMO
+ * arg[0]-arg[n]: name of arff test file
+ * program to evaluate classification algorithms
  * method used 10-fold cross validation 
- * saves csv files with test data: arff file used for testing, classifier names and results (TP,FP, Recall, Precision, F1, ROC)
+ * saves results of the classifiers in csv format: arff file used for testing, classifier names and results (TP,FP, Recall, Precision, F1, ROC)
  */
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -42,18 +41,17 @@ import weka.core.Utils;
 
 public class StartWeka {
 	
-	public static String ls;
-	public static String spaces;
-	public static String sepCSV;
-	static String fs;
-	static String envPath;
-	static String arffFile;
-	static String filePlace;
-//	static String arffFilePlace;
-	static String evalString;
-	static ArrayList<String> arffFileNames;
-	static ArrayList<String> arffFilePaths;
-	static Instances train;
+	public static String ls;		// contains line separator symbol for csv files
+	public static String spaces;	// contains space symbol
+	public static String sepCSV;	// contains the separator symbol for single data elements in csv files 
+	static String fs;				// contains file separator
+	static String envPath;			// the environment path
+	static String arffFile;			// name of the labelled arff file taken as input for classifier
+	static String filePlace;		// path to the labelled groundtruth arff file taken as input for classifier
+	static String evalString;		// results of the different classifiers to be saved in csv
+	static ArrayList<String> arffFileNames;		// names of the labelled groundtruth arff files with file endings
+	static ArrayList<String> arffFilePaths;		// path + names: whole path to labelled groundtruth arff file
+	static Instances train;			// weka instances taken from labelled groundtruth arff file
 
 	public static void main(String[] args) {
 		
@@ -96,7 +94,11 @@ public class StartWeka {
 		ClassifierRunnable crStress = new ClassifierRunnable(arffFileNames,arffFilePaths,train,2);
 
 	}
-	
+	/**
+	 * reads in arff file
+	 * @param 	arffFilePlace	String which contains the whole path to the arff file
+	 * @return	weka Instances which contains all the labelled instances of the arff file
+	 */
 	public static Instances readInArffFile(String arffFilePlace){
 		
 		BufferedReader breader=null;
@@ -127,6 +129,13 @@ public class StartWeka {
 		return train;
 	}
 	
+	/**
+	 * train and evaluate classifiers with 10-fold cross-validation
+	 * @param cm 		Instance of ClassifierMethods
+	 * @param train		training Instances as input for classifiers
+	 * @param arffFile	name of the arff File without file ending
+	 * @return			String, which contains all results of used classifiers
+	 */
 	public static String executeClassifiers(ClassifierMethods cm, Instances train,  String arffFile){
 		
 		Attribute classNames = train.classAttribute();
@@ -172,7 +181,14 @@ public class StartWeka {
 		System.out.println(evalString);
 		return evalString; 
 	}
-	
+	/**
+	 * saves a file with classifier results in csv format
+	 * @param resultString 		String which contains the results (truePositiveRate,
+	 * 							falsePositiveRate,Precision,Recall,fMeasure,ROC) of the classifier  
+	 * @param arffFileName		String which contains the name of the labeled groundtruth arff file, which 
+	 * 							was taken as input to evaluate the classifier 
+	 * @param classifiersUsed 	String which names the classifier used for evaluation  
+	 */
 	public static void saveFile(String resultString, String arffFileName, String classifiersUsed){
 		File createFolder = new File(envPath+fs+"results"+fs);
 		if(!createFolder.isDirectory()){

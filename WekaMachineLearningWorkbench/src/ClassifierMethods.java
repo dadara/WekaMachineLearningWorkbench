@@ -1,3 +1,8 @@
+/* @author: Daniela Ramsauer daniela.ramsauer.univie.ac.at
+ * program to evaluate classification algorithms
+ * method used: 10-fold cross validation 
+ * saves results of the classifiers in csv format: arff file used for testing, classifier names and results (TP,FP, Recall, Precision, F1, ROC)
+ */
 import java.util.Random;
 
 import weka.classifiers.Classifier;
@@ -18,7 +23,6 @@ import weka.classifiers.trees.RandomForest;
 import weka.core.Attribute;
 import weka.core.Instances;
 
-
 public class ClassifierMethods {
 	
 	double truePositiveRate;
@@ -27,7 +31,6 @@ public class ClassifierMethods {
 	double recall;
 	double fMeasure;
 	double roc;
-
 	
 	public ClassifierMethods(){
 		super();
@@ -77,6 +80,12 @@ public class ClassifierMethods {
 
 	
 	//**************************ten folds crossvalidation with Random(1)*************************************************************/ 
+	/**
+	 * evaluates the training data 'Instances tr' with BayesNet and 10-fold cross validation 
+	 * @param tr			training data
+	 * @param classNames	names of possible labels of the Instances	
+	 * @return				String contains the results of the classifier used for 'Instances tr'		
+	 */
 		public String bayesNetFct10folds1random(Instances tr, Attribute classNames){
 			BayesNet bN = new BayesNet();
 			try {
@@ -116,6 +125,12 @@ public class ClassifierMethods {
 			return evString;
 		}
 		
+		/**
+		 * evaluates the training data 'Instances tr' with naiveBayes and 10-fold cross validation 
+		 * @param tr			training data
+		 * @param classNames	names of possible labels of the Instances	
+		 * @return				String contains the results of the classifier used for 'Instances tr'		
+		 */
 		public String naiveBayesFct10folds1random(Instances tr, Attribute classNames){
 			NaiveBayes nB = new NaiveBayes();
 			try {
@@ -155,6 +170,12 @@ public class ClassifierMethods {
 			return evString;
 		}
 		
+		/**
+		 * evaluates the training data 'Instances tr' with naiveBayesMulti and 10-fold cross validation 
+		 * @param tr			training data
+		 * @param classNames	names of possible labels of the Instances	
+		 * @return				String contains the results of the classifier used for 'Instances tr'		
+		 */
 		public String naiveBayesMultiFct10folds1random(Instances tr, Attribute classNames){
 			NaiveBayesMultinomial nB = new NaiveBayesMultinomial();
 			try {
@@ -183,7 +204,12 @@ public class ClassifierMethods {
 			String evString = StartWeka.ls+classifierName+StartWeka.ls+class1+StartWeka.ls+class2+StartWeka.ls+StartWeka.ls;
 			return evString;
 		}
-		
+		/**
+		 * evaluates the training data 'Instances tr' with naiveBayesMultiText and 10-fold cross validation 
+		 * @param tr			training data
+		 * @param classNames	names of possible labels of the Instances	
+		 * @return				String contains the results of the classifier used for 'Instances tr'		
+		 */
 		public String naiveBayesMultiTextFct10folds1random(Instances tr, Attribute classNames){
 			NaiveBayesMultinomialText nB = new NaiveBayesMultinomialText();
 			try {
@@ -214,6 +240,12 @@ public class ClassifierMethods {
 		}
 		
 /****************************** classifer.functions********************************************/
+		/**
+		 * evaluates the training data 'Instances tr' with SMO and 10-fold cross validation 
+		 * @param tr			training data
+		 * @param classNames	names of possible labels of the Instances	
+		 * @return				String contains the results of the classifier used for 'Instances tr'		
+		 */
 		public String smoFct10folds1random(Instances tr, Attribute classNames){
 			SMO smo = new SMO();
 //			String[] smoOptions = new String[18];
@@ -262,7 +294,12 @@ public class ClassifierMethods {
 			String evString = classifierName+StartWeka.ls+class1+StartWeka.ls+class2+StartWeka.ls+StartWeka.ls;
 			return evString;
 		}
-		
+		/**
+		 * evaluates the training data 'Instances tr' with logisticRegression and 10-fold cross validation 
+		 * @param tr			training data
+		 * @param classNames	names of possible labels of the Instances	
+		 * @return				String contains the results of the classifier used for 'Instances tr'		
+		 */
 		public String logisticRegr10folds1random(Instances tr, Attribute classNames){
 			
 			Logistic lo = new Logistic();
@@ -291,7 +328,13 @@ public class ClassifierMethods {
 			String evString = StartWeka.ls+classifierName+StartWeka.ls+class1+StartWeka.ls+class2+StartWeka.ls+StartWeka.ls;
 			return evString;
 		}
-
+		
+		/**
+		 * evaluates the training data 'Instances tr' with simpleLogisticRegression and 10-fold cross validation 
+		 * @param tr			training data
+		 * @param classNames	names of possible labels of the Instances	
+		 * @return				String contains the results of the classifier used for 'Instances tr'		
+		 */
 		public String simpleLogisticRegr10folds1random(Instances tr, Attribute classNames){
 			
 			SimpleLogistic slo = new SimpleLogistic();
@@ -321,7 +364,12 @@ public class ClassifierMethods {
 			return evString;
 		}
 		
-		
+		/**
+		 * evaluates the training data 'Instances tr' with multiPerceptron and 10-fold cross validation 
+		 * @param tr			training data
+		 * @param classNames	names of possible labels of the Instances	
+		 * @return				String contains the results of the classifier used for 'Instances tr'		
+		 */
 		public String multiPercFct10folds1random(Instances tr, Attribute classNames){
 			MultilayerPerceptron mlp= new MultilayerPerceptron();
 			System.out.println("before multiPerc in Method");
@@ -354,7 +402,12 @@ public class ClassifierMethods {
 			String evString = classifierName+StartWeka.ls+class1+StartWeka.ls+class2+StartWeka.ls+StartWeka.ls;
 			return evString;
 		}
-		
+		/**
+		 * evaluates the training data 'Instances tr' with sgd and 10-fold cross validation 
+		 * @param tr			training data
+		 * @param classNames	names of possible labels of the Instances	
+		 * @return				String contains the results of the classifier used for 'Instances tr'		
+		 */
 		public String sgdFct10folds1random(Instances tr, Attribute classNames){
 			SGD sgd= new SGD();
 
@@ -383,7 +436,12 @@ public class ClassifierMethods {
 			String evString = classifierName+StartWeka.ls+class1+StartWeka.ls+class2+StartWeka.ls+StartWeka.ls;
 			return evString;
 		}
-		
+		/**
+		 * evaluates the training data 'Instances tr' with votedPerceptron and 10-fold cross validation 
+		 * @param tr			training data
+		 * @param classNames	names of possible labels of the Instances	
+		 * @return				String contains the results of the classifier used for 'Instances tr'		
+		 */
 		public String votedPercFct10folds1random(Instances tr, Attribute classNames){
 			VotedPerceptron vp= new VotedPerceptron();
 
@@ -414,7 +472,12 @@ public class ClassifierMethods {
 		}
 		
 /****************************** classifer.meta********************************************/
-
+		/**
+		 * evaluates the training data 'Instances tr' with j48 and 10-fold cross validation 
+		 * @param tr			training data
+		 * @param classNames	names of possible labels of the Instances	
+		 * @return				String contains the results of the classifier used for 'Instances tr'		
+		 */
 		public String j48Fct10folds1random(Instances tr, Attribute classNames){
 			J48 j48 = new J48();
 			String[] j48Options = new String[4];
@@ -457,6 +520,12 @@ public class ClassifierMethods {
 
 		}
 		
+		/**
+		 * evaluates the training data 'Instances tr' with Stacking of J48, naiveBayes and RandomForest 
+		 * @param tr			training data
+		 * @param classNames	names of possible labels of the Instances	
+		 * @return				String contains the results of the classifier used for 'Instances tr'		
+		 */
 		public String stacking(Instances tr, Attribute classNames){
 			Stacking stacker = new Stacking();
 			stacker.setMetaClassifier(new J48());

@@ -1,3 +1,6 @@
+/* @author: Daniela Ramsauer daniela.ramsauer.univie.ac.at
+ * Thread to enable that multiple classifiers are working on different classifications at the same time
+ */
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -30,15 +33,21 @@ public class ClassifierRunnable implements Runnable{
 	String sepCSV;
 	String fs;
 	String envPath;
-   Thread mythread ;
-   ArrayList<String> arffFileNames;
-   ArrayList<String> arffFilePaths;
-   String filePlace;
-   Instances instances;
-   int actClass;
-   
-   ClassifierRunnable(ArrayList<String> arfffilenames, ArrayList<String> arfffilepaths, Instances inst, int aClass)
-   { 
+	Thread mythread ;
+	ArrayList<String> arffFileNames;
+	ArrayList<String> arffFilePaths;
+	String filePlace;
+	Instances instances;
+	int actClass;
+   /**
+    * 
+    * @param arfffilenames	arrayList that contains names of the arff File
+    * @param arfffilepaths	arrayList that contain paths to groundtruth arffFiles
+    * @param inst			labelled training Instances 
+    * @param aClass			int defines the class (=label) which is used for binary classification
+    */
+	ClassifierRunnable(ArrayList<String> arfffilenames, ArrayList<String> arfffilepaths, Instances inst, int aClass)
+	{ 
 	   this.arffFileNames = arfffilenames; 
 	   this.arffFilePaths = arfffilepaths;
 	   this.instances = inst;
@@ -46,10 +55,10 @@ public class ClassifierRunnable implements Runnable{
 	   mythread = new Thread(this, "RunnableThread");
 	   System.out.println("thread created" + mythread);
 	   mythread.start();
-   }
+	}
    
-   public void run()
-   {
+	public void run()
+	{
 	   ClassifierMethods cm = new ClassifierMethods();
 	   
 	   ls = System.getProperty("line.separator");
@@ -57,18 +66,21 @@ public class ClassifierRunnable implements Runnable{
 	   sepCSV =",";
 	   fs = File.separator;
 	   envPath = System.getProperty("user.dir");
-	      
-	   
+ 
 	   System.out.println("in THREAD");
        String evalString = executeClassifiers(cm, instances, arffFileNames.get(actClass));	
 	   System.out.println("beforeSave");
 	   String arffName = arffFileNames.get(actClass);
        saveFile(evalString, arffName.substring(0,  arffName.indexOf("."))+"Results", "BayesFunction-excMultiP-J48-");
      
-    
-     System.out.println("mythread run is over" );
+       System.out.println("mythread run is over" );
    }
    
+	/**
+	 * reads in arff file
+	 * @param 	arffFilePlace	String which contains the whole path to the arff file
+	 * @return	weka Instances which contains all the labelled instances of the arff file
+	 */
    public Instances readInArffFile(String arffFilePlace){
 		
 		BufferedReader breader=null;
@@ -99,6 +111,13 @@ public class ClassifierRunnable implements Runnable{
 		return train;
 	}
 	
+   /**
+	 * train and evaluate classifiers with 10-fold cross-validation
+	 * @param cm 		Instance of ClassifierMethods
+	 * @param train		training Instances as input for classifiers
+	 * @param arffFile	name of the arff File without file ending
+	 * @return			String, which contains all results of used classifiers
+	 */
 	public String executeClassifiers(ClassifierMethods cm, Instances train,  String arffFile){
 		
 		Attribute classNames = train.classAttribute();
@@ -129,7 +148,15 @@ public class ClassifierRunnable implements Runnable{
 		return evalString; 
 	}
    
-   public void saveFile(String resultString, String arffFileName, String classifiersUsed){
+	/**
+	 * saves a file with classifier results in csv format
+	 * @param resultString 		String which contains the results (truePositiveRate,
+	 * 							falsePositiveRate,Precision,Recall,fMeasure,ROC) of the classifier  
+	 * @param arffFileName		String which contains the name of the labeled groundtruth arff file, which 
+	 * 							was taken as input to evaluate the classifier 
+	 * @param classifiersUsed 	String which names the classifier used for evaluation  
+	 */
+	public void saveFile(String resultString, String arffFileName, String classifiersUsed){
 		File createFolder = new File(envPath+fs+"results"+fs);
 		if(!createFolder.isDirectory()){
 			createFolder.mkdirs();
