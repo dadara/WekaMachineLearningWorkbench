@@ -81,8 +81,8 @@ public class ClassifierMethods {
 		Classifier cls=null;
 		try {
 //			cls = (Classifier) weka.core.SerializationHelper.read(System.getProperty("user.dir")+fs+"results"+fs+"bayesNetWekaEx1.model");
-			cls = (Classifier) weka.core.SerializationHelper.read(System.getProperty("user.dir")+fs+"results"+fs+"W7BayesNet.model");
-			//			cls = (Classifier) weka.core.SerializationHelper.read(System.getProperty("user.dir")+fs+"results"+fs+"bayesNetJava.model");
+//			cls = (Classifier) weka.core.SerializationHelper.read(System.getProperty("user.dir")+fs+"results"+fs+"W7BayesNet.model");
+			cls = (Classifier) weka.core.SerializationHelper.read(System.getProperty("user.dir")+fs+"results"+fs+"bayesNetJava.model");
 		} catch (Exception e3) {
 			// TODO Auto-generated catch block
 			e3.printStackTrace();

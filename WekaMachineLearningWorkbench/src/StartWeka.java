@@ -83,15 +83,15 @@ public class StartWeka {
 //		saveFile(evalString,"HappyBinaryResults", "BayesFunction-excMultiP-J48-");
 		ClassifierRunnable crHappy = new ClassifierRunnable(arffFileNames,arffFilePaths,train,0);
 /********************************* groundtruth-sad.csv.arff ***********************************/
-		train = readInArffFile(arffFilePaths.get(1));
+//		train = readInArffFile(arffFilePaths.get(1));
 //		evalString = executeClassifiers(cm, train, arffFileNames.get(1));	
 //		saveFile(evalString,"SadBinaryResults", "4BayesFunction-excMultiP-J48-");
-		ClassifierRunnable crSad = new ClassifierRunnable(arffFileNames,arffFilePaths,train,1);
+//		ClassifierRunnable crSad = new ClassifierRunnable(arffFileNames,arffFilePaths,train,1);
 /********************************* groundtruth-stress.csv.arff ************************************/
-		train = readInArffFile(arffFilePaths.get(2));
+//		train = readInArffFile(arffFilePaths.get(2));
 //		evalString = executeClassifiers(cm, train, arffFileNames.get(2));	
 //		saveFile(evalString,"StressBinaryResults", "4BayesFunction-excMultiP-J48-");	
-		ClassifierRunnable crStress = new ClassifierRunnable(arffFileNames,arffFilePaths,train,2);
+//		ClassifierRunnable crStress = new ClassifierRunnable(arffFileNames,arffFilePaths,train,2);
 
 	}
 	/**
