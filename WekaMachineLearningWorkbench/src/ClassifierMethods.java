@@ -89,44 +89,56 @@ public class ClassifierMethods {
 		}
 		
 		/********************************use previously saved model**********************************/
-
-
-//		BufferedReader breader=null;
-//		breader = null;
-//		try {
-//			breader = new BufferedReader(new FileReader(System.getProperty("user.dir")+fs+"groundtruth"+fs+"groundtruth-happyUnlabeled.arff"));		
-//		} catch (FileNotFoundException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//		
-//		Instances trainT=null;
-//		try {
-//			trainT = new Instances(breader);
-//			breader.close();
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//		
-//		int s1=0;  
-//
-//		//perform your prediction
-//		double value=0;
-//		try {
-//			value = cls.classifyInstance(trainT.instance(s1));
-//		} catch (Exception e2) {
-//			// TODO Auto-generated catch block
-//			e2.printStackTrace();
-//		}
-//
-//		//get the name of the class value
-//		String prediction=trainT.classAttribute().value((int)value); 
-//
-//		System.out.println("The predicted value of instance "+
-//		                    Integer.toString(s1)+
-//		                    ": "+prediction); 
+		BufferedReader breader=null;
+		breader = null;
+		try {
+			
+			breader = new BufferedReader(new FileReader(System.getProperty("user.dir")+fs+"groundtruth"+fs+"groundtruth-happy.csvTest.arff"));		
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
+		Instances trainT=null;
+		try {
+			trainT = new Instances(breader);
+			breader.close();
+
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		trainT.setClassIndex(trainT.numAttributes()-1);
+
+		int s1=0;  
+
+		//perform your prediction
+		double value=0;
+		
+		for(int i=0; i<trainT.size(); i++){
+//		System.out.println("sample size: "+ trainT.size());
+//		for(int i=0; i<10; i++){
+			try {
+				value = cls.classifyInstance(trainT.instance(i));
+				
+				//get the name of the class value
+				String prediction=trainT.classAttribute().value((int)value); 
+//				int predInt = Integer.parseInt(prediction);
+				
+//				if(!prediction.equalsIgnoreCase(tr.classAttribute().value((int)value))){
+					System.out.println("The predicted value of instance"+Integer.toString(i)+": "+prediction+
+							" the original classification value"+Integer.toString(i)+": "+tr.classAttribute().value((int)value)); 
+//				}
+				
+			} catch (Exception e2) {
+				// TODO Auto-generated catch block
+				e2.printStackTrace();
+			}
+			
+		
+		}
+
+				
 		/******************************************************************/
 
 		

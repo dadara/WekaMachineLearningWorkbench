@@ -66,7 +66,7 @@ public class StartWeka {
 		arffFileNames.add("groundtruth-stress.csv.arff");	
 		
 		envPath = System.getProperty("user.dir");
-		filePlace = envPath+fs+"groundtruthData"+fs;
+		filePlace = envPath+fs+"groundtruth"+fs;
 		ArrayList<String> arffFilePaths = new ArrayList<String>();
 		for(int i = 0; i<arffFileNames.size(); i++){
 //			System.out.println(arffFileNames.get(i));
@@ -140,7 +140,7 @@ public class StartWeka {
 		
 		Attribute classNames = train.classAttribute();
 //		evalString = "";
-		String header = "arff file is in: groundtruthData"+fs+arffFile+ls+ls+"classifier"+sepCSV+"truePositiveRate"+sepCSV+"falsePositiveRate"+sepCSV+"Precision"+sepCSV+"Recall"+sepCSV+"fMeasure"+sepCSV+"ROC"+ls+ls;
+		String header = "arff file is in: groundtruth"+fs+arffFile+ls+ls+"classifier"+sepCSV+"truePositiveRate"+sepCSV+"falsePositiveRate"+sepCSV+"Precision"+sepCSV+"Recall"+sepCSV+"fMeasure"+sepCSV+"ROC"+ls+ls;
 		evalString = header;
 //		evalString += cm.bayesNetFct10folds1random(train, classNames);
 //		evalString += cm.naiveBayesFct10folds1random(train, classNames);
