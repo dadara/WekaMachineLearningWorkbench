@@ -1,4 +1,4 @@
-/* @author: Daniela Ramsauer daniela.ramsauer.univie.ac.at
+/** @author: Daniela Ramsauer daniela.ramsauer.univie.ac.at
  * Mood Classification for Social Media messages (Twitter Tweets, Facebook Posts,...) 
  * programm to test different text classification algorithms on test data sets
  * arg[0]-arg[n]: name of arff test file
@@ -160,23 +160,23 @@ public class StartWeka {
 //		evalString += cm.stacking(train, classNames);
 		
 		Classifier classifier = new BayesNet();
-		evalString += cm.classify10folds1random(train, classNames, classifier, "BayesNet")+ls;
-		classifier = new NaiveBayes();
-		evalString += cm.classify10folds1random(train, classNames, classifier, "NaiveBayes")+ls;
-		classifier = new NaiveBayesMultinomial();
-		evalString += cm.classify10folds1random(train, classNames, classifier, "NaiveBayesMultinomial")+ls;
-		classifier = new Logistic();
-		evalString += cm.classify10folds1random(train, classNames, classifier, "Logistic")+ls;
-		classifier = new SMO();
-		evalString += cm.classify10folds1random(train, classNames, classifier, "SMO")+ls;
-		classifier = new SimpleLogistic();
-		evalString += cm.classify10folds1random(train, classNames, classifier, "SimpleLogistic")+ls;
-		classifier = new SGD();
-		evalString += cm.classify10folds1random(train, classNames, classifier, "SGD")+ls;
-		classifier = new VotedPerceptron();
-		evalString += cm.classify10folds1random(train, classNames, classifier, "VotedPerceptron")+ls;
-		classifier = new J48();
-		evalString += cm.classify10folds1random(train, classNames, classifier, "J48")+ls;
+//		evalString += cm.classify10folds1random(train, classNames, classifier, "BayesNet")+ls;
+//		classifier = new NaiveBayes();
+//		evalString += cm.classify10folds1random(train, classNames, classifier, "NaiveBayes")+ls;
+//		classifier = new NaiveBayesMultinomial();
+//		evalString += cm.classify10folds1random(train, classNames, classifier, "NaiveBayesMultinomial")+ls;
+//		classifier = new Logistic();
+//		evalString += cm.classify10folds1random(train, classNames, classifier, "Logistic")+ls;
+//		classifier = new SMO();
+//		evalString += cm.classify10folds1random(train, classNames, classifier, "SMO")+ls;
+//		classifier = new SimpleLogistic();
+//		evalString += cm.classify10folds1random(train, classNames, classifier, "SimpleLogistic")+ls;
+//		classifier = new SGD();
+//		evalString += cm.classify10folds1random(train, classNames, classifier, "SGD")+ls;
+//		classifier = new VotedPerceptron();
+//		evalString += cm.classify10folds1random(train, classNames, classifier, "VotedPerceptron")+ls;
+//		classifier = new J48();
+//		evalString += cm.classify10folds1random(train, classNames, classifier, "J48")+ls;
 		
 		System.out.println(evalString);
 		return evalString; 
