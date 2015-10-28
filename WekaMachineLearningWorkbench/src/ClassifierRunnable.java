@@ -76,40 +76,40 @@ public class ClassifierRunnable implements Runnable{
        System.out.println("mythread run is over" );
    }
    
-	/**
-	 * reads in arff file
-	 * @param 	arffFilePlace	String which contains the whole path to the arff file
-	 * @return	weka Instances which contains all the labelled instances of the arff file
-	 */
-   public Instances readInArffFile(String arffFilePlace){
-		
-		BufferedReader breader=null;
-		breader = null;
-		try {
-			breader = new BufferedReader(new FileReader(arffFilePlace));		
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		Instances train=null;
-		try {
-			train = new Instances(breader);
-			train.setClassIndex(train.numAttributes()-1);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		try {
-			breader.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		return train;
-	}
+//	/**
+//	 * reads in arff file
+//	 * @param 	arffFilePlace	String which contains the whole path to the arff file
+//	 * @return	weka Instances which contains all the labelled instances of the arff file
+//	 */
+//   public Instances readInArffFile(String arffFilePlace){
+//		
+//		BufferedReader breader=null;
+//		breader = null;
+//		try {
+//			breader = new BufferedReader(new FileReader(arffFilePlace));		
+//		} catch (FileNotFoundException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		
+//		Instances train=null;
+//		try {
+//			train = new Instances(breader);
+//			train.setClassIndex(train.numAttributes()-1);
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		
+//		try {
+//			breader.close();
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		
+//		return train;
+//	}
 	
    /**
 	 * train and evaluate classifiers with 10-fold cross-validation

@@ -2,6 +2,7 @@
  * program to evaluate classification algorithms
  * method used: 10-fold cross validation 
  * saves results of the classifiers in csv format: arff file used for testing, classifier names and results (TP,FP, Recall, Precision, F1, ROC)
+ * saves classifier.model 
  */
 import java.io.BufferedReader;
 import java.io.File;
@@ -64,9 +65,7 @@ public class ClassifierMethods {
 		// serialize model
 		 ObjectOutputStream oos = new ObjectOutputStream(
 		                            new FileOutputStream(System.getProperty("user.dir")+fs+"results"+fs+"bayesNetJava.model"));
-		 
-			oos.writeObject(classifier);
-		
+		 oos.writeObject(classifier);
 		 oos.flush();
 		 oos.close();
 		} catch (IOException e2) {
@@ -74,25 +73,23 @@ public class ClassifierMethods {
 			e2.printStackTrace();
 		}
 		
+//		System.out.println("dir: "+System.getProperty("user.dir")+fs+"results"+fs+"bayesNet.model");
 		
-		System.out.println("dir: "+System.getProperty("user.dir")+fs+"results"+fs+"bayesNet.model");
-		
-		/********************************use previously saved model**********************************/
+/********************************read in previously saved model begin**********************************/
 		Classifier cls=null;
 		try {
-//			cls = (Classifier) weka.core.SerializationHelper.read(System.getProperty("user.dir")+fs+"results"+fs+"bayesNetWekaEx1.model");
 //			cls = (Classifier) weka.core.SerializationHelper.read(System.getProperty("user.dir")+fs+"results"+fs+"W7BayesNet.model");
 			cls = (Classifier) weka.core.SerializationHelper.read(System.getProperty("user.dir")+fs+"results"+fs+"bayesNetJava.model");
 		} catch (Exception e3) {
 			// TODO Auto-generated catch block
 			e3.printStackTrace();
 		}
-		
-		/********************************use previously saved model**********************************/
+/********************************read in previously saved model end**********************************/
+	
+/********************************use previously saved model for classification begin**********************************/
 		BufferedReader breader=null;
 		breader = null;
 		try {
-			
 			breader = new BufferedReader(new FileReader(System.getProperty("user.dir")+fs+"groundtruth"+fs+"groundtruth-happy.csvTest.arff"));		
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -116,11 +113,8 @@ public class ClassifierMethods {
 		double value=0;
 		
 		for(int i=0; i<trainT.size(); i++){
-//		System.out.println("sample size: "+ trainT.size());
-//		for(int i=0; i<10; i++){
 			try {
 				value = cls.classifyInstance(trainT.instance(i));
-				
 				//get the name of the class value
 				String prediction=trainT.classAttribute().value((int)value); 
 //				int predInt = Integer.parseInt(prediction);
@@ -136,12 +130,10 @@ public class ClassifierMethods {
 			}
 			
 		
-		}
-
-				
-		/******************************************************************/
-
+		}		
+/***************************************use previously saved model  for classification end*************************************/
 		
+/*********************************evaluate the classifier with 10-fold cross validation begin**********************************/		
 		Evaluation ev =null;
 		try {
 			ev = new Evaluation(tr);
@@ -155,12 +147,6 @@ public class ClassifierMethods {
 			e.printStackTrace();
 		}
 		
-//		truePositiveRate = (ev.truePositiveRate(0)+ev.truePositiveRate(1))/2;
-//		falsePositiveRate = (ev.falsePositiveRate(0)+ev.falsePositiveRate(1))/2;
-//		precision = (ev.precision(0)+ev.precision(1))/2;
-//		recall = (ev.recall(0)+ev.recall(1))/2;
-//		fMeasure = (ev.fMeasure(0)+ev.fMeasure(1))/2;
-//		roc = (ev.areaUnderROC(0)+ev.areaUnderROC(1))/2;
 		truePositiveRate = ev.weightedTruePositiveRate();
 		falsePositiveRate = ev.weightedFalseNegativeRate();
 		precision = ev.weightedPrecision();
@@ -171,12 +157,14 @@ public class ClassifierMethods {
 		String classAvg = truePositiveRate+StartWeka.sepCSV+falsePositiveRate+StartWeka.sepCSV+precision+StartWeka.sepCSV+recall+StartWeka.sepCSV+fMeasure+StartWeka.sepCSV+roc;
 		classifierName+=" 10folds-Random(1)";
 		String evString = classifierName+StartWeka.sepCSV+classAvg+StartWeka.ls+StartWeka.ls;
-
-		return evString;
+/*********************************evaluate the classifier with 10-fold cross validation end**********************************/		
 		
+		return evString;	
 	}
+
 	
-/****************************** classifer.bayes********************************************/
+	{
+///****************************** classifer.bayes********************************************/
 //
 //	
 //	//**************************ten folds crossvalidation with Random(1)*************************************************************/ 
@@ -670,5 +658,5 @@ public class ClassifierMethods {
 //			return evString;
 //			
 //		}
-
+	}
 }
