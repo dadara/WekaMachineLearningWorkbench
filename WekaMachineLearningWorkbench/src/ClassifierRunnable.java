@@ -40,7 +40,6 @@ public class ClassifierRunnable implements Runnable{
 	Instances instances;
 	int actClass;
    /**
-    * 
     * @param arfffilenames	arrayList that contains names of the arff File
     * @param arfffilepaths	arrayList that contain paths to groundtruth arffFiles
     * @param inst			labelled training Instances 
@@ -75,41 +74,6 @@ public class ClassifierRunnable implements Runnable{
      
        System.out.println("mythread run is over" );
    }
-   
-//	/**
-//	 * reads in arff file
-//	 * @param 	arffFilePlace	String which contains the whole path to the arff file
-//	 * @return	weka Instances which contains all the labelled instances of the arff file
-//	 */
-//   public Instances readInArffFile(String arffFilePlace){
-//		
-//		BufferedReader breader=null;
-//		breader = null;
-//		try {
-//			breader = new BufferedReader(new FileReader(arffFilePlace));		
-//		} catch (FileNotFoundException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//		
-//		Instances train=null;
-//		try {
-//			train = new Instances(breader);
-//			train.setClassIndex(train.numAttributes()-1);
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//		
-//		try {
-//			breader.close();
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//		
-//		return train;
-//	}
 	
    /**
 	 * train and evaluate classifiers with 10-fold cross-validation
@@ -128,22 +92,22 @@ public class ClassifierRunnable implements Runnable{
 		Classifier classifier = new BayesNet();
 //		BayesNet classifier = new BayesNet();
 		evalString += cm.classify10folds1random(train, classNames, classifier, "BayesNet")+ls;
-//		classifier = new NaiveBayes();
-//		evalString += cm.classify10folds1random(train, classNames, classifier, "NaiveBayes")+ls;
-//		classifier = new NaiveBayesMultinomial();
-//		evalString += cm.classify10folds1random(train, classNames, classifier, "NaiveBayesMultinomial")+ls;
-//		classifier = new Logistic();
-//		evalString += cm.classify10folds1random(train, classNames, classifier, "Logistic")+ls;
-//		classifier = new SMO();
-//		evalString += cm.classify10folds1random(train, classNames, classifier, "SMO")+ls;
-//		classifier = new SimpleLogistic();
-//		evalString += cm.classify10folds1random(train, classNames, classifier, "SimpleLogistic")+ls;
-//		classifier = new SGD();
-//		evalString += cm.classify10folds1random(train, classNames, classifier, "SGD")+ls;
-//		classifier = new VotedPerceptron();
-//		evalString += cm.classify10folds1random(train, classNames, classifier, "VotedPerceptron")+ls;
-//		classifier = new J48();
-//		evalString += cm.classify10folds1random(train, classNames, classifier, "J48")+ls;
+		classifier = new NaiveBayes();
+		evalString += cm.classify10folds1random(train, classNames, classifier, "NaiveBayes")+ls;
+		classifier = new NaiveBayesMultinomial();
+		evalString += cm.classify10folds1random(train, classNames, classifier, "NaiveBayesMultinomial")+ls;
+		classifier = new Logistic();
+		evalString += cm.classify10folds1random(train, classNames, classifier, "Logistic")+ls;
+		classifier = new SMO();
+		evalString += cm.classify10folds1random(train, classNames, classifier, "SMO")+ls;
+		classifier = new SimpleLogistic();
+		evalString += cm.classify10folds1random(train, classNames, classifier, "SimpleLogistic")+ls;
+		classifier = new SGD();
+		evalString += cm.classify10folds1random(train, classNames, classifier, "SGD")+ls;
+		classifier = new VotedPerceptron();
+		evalString += cm.classify10folds1random(train, classNames, classifier, "VotedPerceptron")+ls;
+		classifier = new J48();
+		evalString += cm.classify10folds1random(train, classNames, classifier, "J48")+ls;
 		
 //		System.out.println(evalString);
 		return evalString; 
