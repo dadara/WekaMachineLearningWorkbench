@@ -44,6 +44,11 @@ public class ClassifierMethods {
 		super();
 	}
 	
+	/**
+	 * classifies the passed Instances in 
+	 * @param 	arffFilePlace	String which contains the whole path to the arff file
+	 * @return	weka Instances which contains all the labelled instances of the arff file
+	 */
 	public String classify10folds1random(Instances tr, Attribute classNames, Classifier classifier, String classifierName){
 //	public String classify10folds1random(Instances tr, Attribute classNames, BayesNet classifier, String classifierName){
 
@@ -162,7 +167,7 @@ public class ClassifierMethods {
 		return evString;	
 	}
 
-	
+//	save Area
 	{
 ///****************************** classifer.bayes********************************************/
 //
@@ -658,5 +663,7 @@ public class ClassifierMethods {
 //			return evString;
 //			
 //		}
+	
 	}
+
 }
